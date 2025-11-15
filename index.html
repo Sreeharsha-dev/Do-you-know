@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WRIM Technologies - Building Legacies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-color: #050816;
+        --primary-color: #00ffff;
+        --secondary-color: #9333ea; /* Purple-700 */
+        --text-light: #cbd5e1; /* Slate-300 */
+        --text-dark: #94a3b8; /* Slate-400 */
+        --border-color: rgba(0, 255, 255, 0.2);
+      }
+
+      body {
+        background-color: var(--bg-color);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Orbitron', sans-serif;
+      }
+      
+      /* Styles for CybercoreBackground component */
+      .scene {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        perspective: 800px;
+        z-index: 0;
+      }
+
+      .floor {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50%;
+        background: 
+          linear-gradient(to top, var(--bg-color) 0%, transparent 100%),
+          repeating-linear-gradient(0.25turn, transparent, transparent 49.5px, var(--border-color) 50px),
+          repeating-linear-gradient(0turn, transparent, transparent 49.5px, var(--border-color) 50px);
+        background-size: 100% 100%, 50px 50px, 50px 50px;
+        transform: rotateX(80deg) translateY(35%);
+        transform-origin: bottom center;
+      }
+      
+      .light-stream-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .light-beam {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        animation-name: rise;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      .light-beam.primary {
+        background: linear-gradient(to top, var(--primary-color) 0%, transparent 100%);
+        box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+      }
+
+      .light-beam.secondary {
+        background: linear-gradient(to top, var(--secondary-color) 0%, transparent 100%);
+        box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+      }
+
+      @keyframes rise {
+        0% {
+          transform: translateY(100%);
+          opacity: 0;
+        }
+        15% {
+          opacity: 0.8;
+        }
+        85% {
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateY(-20%);
+          opacity: 0;
+        }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in-out forwards;
+      }
+      
+      /* Styles for scroll-triggered animations */
+      .scroll-fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .scroll-fade-in.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Styles for the typing animation */
+      .blinking-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em; /* Match line height */
+        background-color: var(--primary-color);
+        margin-left: 4px;
+        animation: blink 1s step-end infinite;
+        vertical-align: bottom;
+      }
+
+      @keyframes blink {
+        from, to { background-color: transparent }
+        50% { background-color: var(--primary-color); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.417.0",
+    "@radix-ui/react-slot": "https://aistudiocdn.com/@radix-ui/react-slot@^1.2.4",
+    "class-variance-authority": "https://aistudiocdn.com/class-variance-authority@^0.7.1",
+    "clsx": "https://aistudiocdn.com/clsx@^2.1.1",
+    "tailwind-merge": "https://aistudiocdn.com/tailwind-merge@^3.4.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Inquiry - WRIM Technologies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-color: #050816;
+        --primary-color: #00ffff;
+        --secondary-color: #9333ea;
+        --text-light: #cbd5e1;
+        --text-dark: #94a3b8;
+        --border-color: rgba(0, 255, 255, 0.2);
+      }
+
+      body {
+        background-color: var(--bg-color);
+        font-family: 'Roboto', sans-serif;
+        color: var(--text-light);
+        overflow-x: hidden;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Orbitron', sans-serif;
+      }
+
+      select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+      }
+      
+      .scene {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        perspective: 800px;
+        z-index: 0;
+      }
+
+      .floor {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50%;
+        background: 
+          linear-gradient(to top, var(--bg-color) 0%, transparent 100%),
+          repeating-linear-gradient(0.25turn, transparent, transparent 49.5px, var(--border-color) 50px),
+          repeating-linear-gradient(0turn, transparent, transparent 49.5px, var(--border-color) 50px);
+        background-size: 100% 100%, 50px 50px, 50px 50px;
+        transform: rotateX(80deg) translateY(35%);
+        transform-origin: bottom center;
+      }
+      
+      .light-beam {
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        background: linear-gradient(to top, var(--primary-color) 0%, transparent 100%);
+        box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+        animation-name: rise;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      @keyframes rise {
+        0% { transform: translateY(100%); opacity: 0; }
+        15% { opacity: 0.8; }
+        85% { opacity: 0.8; }
+        100% { transform: translateY(-20%); opacity: 0; }
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .option-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .option-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+</head>
+<body class="bg-[var(--bg-color)]">
+    <div class="scene" aria-hidden="true">
+        <div class="floor"></div>
+        <div class="light-stream-container">
+            <div class="light-beam" style="left: 10%; width: 2px; animation-delay: 1s; animation-duration: 6s; height: 60%;"></div>
+            <div class="light-beam" style="left: 25%; width: 1px; animation-delay: 3s; animation-duration: 8s; height: 50%;"></div>
+            <div class="light-beam" style="left: 50%; width: 2px; animation-delay: 0s; animation-duration: 5s; height: 70%;"></div>
+            <div class="light-beam" style="left: 75%; width: 1px; animation-delay: 5s; animation-duration: 7s; height: 45%;"></div>
+            <div class="light-beam" style="left: 90%; width: 2px; animation-delay: 2s; animation-duration: 6.5s; height: 65%;"></div>
+        </div>
+    </div>
+    
+    <div class="relative z-10 container mx-auto px-6 py-12 md:py-20 min-h-screen flex items-center">
+        <div class="max-w-4xl mx-auto w-full">
+            <div class="text-center mb-12">
+                <a href="/" class="rounded-sm text-sm text-slate-400 hover:text-[var(--primary-color)] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--bg-color)] focus:ring-[var(--primary-color)]">&larr; Back to WRIM Technologies</a>
+                <h1 class="text-4xl md:text-5xl font-bold text-white font-orbitron mt-4">Get In Touch</h1>
+                <p class="mt-4 text-lg text-slate-300">Let's explore how we can help you achieve your goals.</p>
+                <div class="w-24 h-1 bg-[var(--primary-color)] mx-auto mt-6"></div>
+            </div>
+
+            <!-- Step 1: Inquiry Type Selection -->
+            <div id="inquiryTypeSelection" class="space-y-6">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-4">How can we assist you today?</h2>
+                    <p class="text-slate-400">Select an option to get started</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Project Inquiry -->
+                    <div class="option-card bg-slate-900/50 p-8 rounded-lg border border-[var(--border-color)] shadow-2xl shadow-black/50 backdrop-blur-sm" onclick="selectInquiryType('project')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--primary-color)]/10 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Start a Project</h3>
+                            <p class="text-slate-400">Have a project in mind? Tell us about your vision and requirements.</p>
+                        </div>
+                    </div>
+
+                    <!-- Consultation Call -->
+                    <div class="option-card bg-slate-900/50 p-8 rounded-lg border border-[var(--border-color)] shadow-2xl shadow-black/50 backdrop-blur-sm" onclick="selectInquiryType('consultation')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--primary-color)]/10 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Schedule a Call</h3>
+                            <p class="text-slate-400">Want to discuss your needs? Book a consultation with our team.</p>
+                        </div>
+                    </div>
+
+                    <!-- Partnership Inquiry -->
+                    <div class="option-card bg-slate-900/50 p-8 rounded-lg border border-[var(--border-color)] shadow-2xl shadow-black/50 backdrop-blur-sm" onclick="selectInquiryType('partnership')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--primary-color)]/10 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">Partnership</h3>
+                            <p class="text-slate-400">Interested in partnering with us? Let's explore opportunities together.</p>
+                        </div>
+                    </div>
+
+                    <!-- General Inquiry -->
+                    <div class="option-card bg-slate-900/50 p-8 rounded-lg border border-[var(--border-color)] shadow-2xl shadow-black/50 backdrop-blur-sm" onclick="selectInquiryType('general')">
+                        <div class="text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-[var(--primary-color)]/10 flex items-center justify-center">
+                                <svg class="w-8 h-8 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">General Inquiry</h3>
+                            <p class="text-slate-400">Have questions or need information? Reach out to us.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Dynamic Form (Initially Hidden) -->
+            <div id="dynamicForm" class="hidden fade-in">
+                <button onclick="goBack()" class="mb-6 text-slate-400 hover:text-[var(--primary-color)] transition-colors duration-300 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to options
+                </button>
+
+                <form id="contactForm" class="space-y-6 bg-slate-900/50 p-8 rounded-lg border border-[var(--border-color)] shadow-2xl shadow-black/50 backdrop-blur-sm">
+                    <input type="hidden" id="inquiryType" name="inquiry_type" value="">
+                    
+                    <div id="formTitle" class="text-center mb-6">
+                        <h2 class="text-2xl font-bold text-white mb-2"></h2>
+                        <p class="text-slate-400"></p>
+                    </div>
+
+                    <!-- Common Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-300 mb-2">Full Name *</label>
+                            <input type="text" id="name" name="from_name" required class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-300 mb-2">Email Address *</label>
+                            <input type="email" id="email" name="reply_to" required class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-slate-300 mb-2">Company Name</label>
+                            <input type="text" id="company" name="company" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                    </div>
+
+                    <!-- Project Specific Fields -->
+                    <div id="projectFields" class="space-y-6 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="projectType" class="block text-sm font-medium text-slate-300 mb-2">Service of Interest *</label>
+                                <select id="projectType" name="project_type" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                    <option value="">Select a service...</option>
+                                    <option>AI & Machine Learning</option>
+                                    <option>Cloud & Infrastructure</option>
+                                    <option>Cybersecurity</option>
+                                    <option>Product Engineering</option>
+                                    <option>Data Science & Automation</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="budget" class="block text-sm font-medium text-slate-300 mb-2">Estimated Budget (USD)</label>
+                                <select id="budget" name="budget" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                    <option value="">Select a budget...</option>
+                                    <option>&lt; $10,000</option>
+                                    <option>$10,000 - $50,000</option>
+                                    <option>$50,000 - $250,000</option>
+                                    <option>$250,000+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="timeline" class="block text-sm font-medium text-slate-300 mb-2">Expected Timeline</label>
+                            <select id="timeline" name="timeline" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                <option value="">Select timeline...</option>
+                                <option>Urgent (1-2 weeks)</option>
+                                <option>Short-term (1-3 months)</option>
+                                <option>Medium-term (3-6 months)</option>
+                                <option>Long-term (6+ months)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="projectDescription" class="block text-sm font-medium text-slate-300 mb-2">Project Details *</label>
+                            <textarea id="projectDescription" name="message" rows="6" required placeholder="Tell us about your project goals, requirements, and any specific challenges..." class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Consultation Specific Fields -->
+                    <div id="consultationFields" class="space-y-6 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="preferredDate" class="block text-sm font-medium text-slate-300 mb-2">Preferred Date</label>
+                                <input type="date" id="preferredDate" name="preferred_date" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                            </div>
+                            <div>
+                                <label for="preferredTime" class="block text-sm font-medium text-slate-300 mb-2">Preferred Time</label>
+                                <select id="preferredTime" name="preferred_time" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                    <option value="">Select time...</option>
+                                    <option>Morning (9AM - 12PM)</option>
+                                    <option>Afternoon (12PM - 5PM)</option>
+                                    <option>Evening (5PM - 8PM)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="timezone" class="block text-sm font-medium text-slate-300 mb-2">Your Timezone</label>
+                            <input type="text" id="timezone" name="timezone" placeholder="e.g., EST, PST, UTC+5:30" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                        <div>
+                            <label for="consultationTopic" class="block text-sm font-medium text-slate-300 mb-2">What would you like to discuss? *</label>
+                            <textarea id="consultationTopic" name="message" rows="5" required placeholder="Brief description of topics or questions you'd like to cover..." class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Partnership Specific Fields -->
+                    <div id="partnershipFields" class="space-y-6 hidden">
+                        <div>
+                            <label for="organizationType" class="block text-sm font-medium text-slate-300 mb-2">Organization Type *</label>
+                            <select id="organizationType" name="organization_type" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                <option value="">Select type...</option>
+                                <option>Tech Company</option>
+                                <option>Agency</option>
+                                <option>Consulting Firm</option>
+                                <option>Educational Institution</option>
+                                <option>Non-Profit</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="partnershipType" class="block text-sm font-medium text-slate-300 mb-2">Partnership Interest *</label>
+                            <select id="partnershipType" name="partnership_type" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition">
+                                <option value="">Select interest...</option>
+                                <option>Technology Partnership</option>
+                                <option>Reseller Partnership</option>
+                                <option>Strategic Alliance</option>
+                                <option>Joint Venture</option>
+                                <option>Other Collaboration</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="partnershipDetails" class="block text-sm font-medium text-slate-300 mb-2">Partnership Proposal *</label>
+                            <textarea id="partnershipDetails" name="message" rows="6" required placeholder="Describe your organization and how you envision us working together..." class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- General Inquiry Fields -->
+                    <div id="generalFields" class="space-y-6 hidden">
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-slate-300 mb-2">Subject *</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Brief subject of your inquiry" class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition" />
+                        </div>
+                        <div>
+                            <label for="generalMessage" class="block text-sm font-medium text-slate-300 mb-2">Your Message *</label>
+                            <textarea id="generalMessage" name="message" rows="6" required placeholder="Please provide details about your inquiry..." class="w-full bg-slate-900/50 border border-[var(--border-color)] rounded-md py-2 px-4 text-white hover:border-[var(--primary-color)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900/50 focus:ring-[var(--primary-color)] focus:border-[var(--primary-color)] transition"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-4">
+                        <button
+                            type="submit"
+                            id="submitBtn"
+                            class="px-10 py-3 bg-[var(--primary-color)] text-black font-bold uppercase tracking-widest rounded-sm transform transition-all duration-300 hover:bg-white hover:shadow-[0_0_20px_var(--primary-color)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-4 focus:ring-offset-[var(--bg-color)] focus:ring-white disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Submit Inquiry
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="hidden mt-6 p-6 bg-green-900/30 border border-green-500 rounded-lg text-center">
+                    <div class="text-green-400 text-4xl mb-4">✓</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Message Sent Successfully!</h3>
+                    <p class="text-slate-300">Thank you for reaching out. We'll get back to you shortly.</p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden mt-6 p-6 bg-red-900/30 border border-red-500 rounded-lg text-center">
+                    <div class="text-red-400 text-4xl mb-4">✗</div>
+                    <h3 class="text-xl font-bold text-white mb-2">Something went wrong</h3>
+                    <p class="text-slate-300">Please try again or contact us directly at contact@wrimtech.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize EmailJS with your User ID
+        // Replace 'YOUR_USER_ID' with your actual EmailJS user ID
+        (function(){
+            emailjs.init("YOUR_USER_ID"); // Get this from EmailJS dashboard
+        })();
+
+        const formConfig = {
+            project: {
+                title: "Start Your Project",
+                subtitle: "Tell us about your project vision and requirements",
+                fields: ['projectFields']
+            },
+            consultation: {
+                title: "Schedule a Consultation",
+                subtitle: "Book a call with our team to discuss your needs",
+                fields: ['consultationFields']
+            },
+            partnership: {
+                title: "Partnership Inquiry",
+                subtitle: "Let's explore collaboration opportunities",
+                fields: ['partnershipFields']
+            },
+            general: {
+                title: "General Inquiry",
+                subtitle: "We're here to answer your questions",
+                fields: ['generalFields']
+            }
+        };
+
+        function selectInquiryType(type) {
+            // Hide selection screen
+            document.getElementById('inquiryTypeSelection').classList.add('hidden');
+            
+            // Show form
+            const dynamicForm = document.getElementById('dynamicForm');
+            dynamicForm.classList.remove('hidden');
+            
+            // Set inquiry type
+            document.getElementById('inquiryType').value = type;
+            
+            // Update form title
+            const config = formConfig[type];
+            const titleElement = document.querySelector('#formTitle h2');
+            const subtitleElement = document.querySelector('#formTitle p');
+            titleElement.textContent = config.title;
+            subtitleElement.textContent = config.subtitle;
+            
+            // Hide all specific fields first
+            document.getElementById('projectFields').classList.add('hidden');
+            document.getElementById('consultationFields').classList.add('hidden');
+            document.getElementById('partnershipFields').classList.add('hidden');
+            document.getElementById('generalFields').classList.add('hidden');
+            
+            // Show relevant fields
+            config.fields.forEach(fieldId => {
+                document.getElementById(fieldId).classList.remove('hidden');
+            });
+
+            // Update required attributes based on visible fields
+            updateRequiredFields(type);
+        }
+
+        function updateRequiredFields(type) {
+            // Remove all required attributes from specific fields
+            document.querySelectorAll('#projectFields select, #projectFields textarea').forEach(el => {
+                el.removeAttribute('required');
+            });
+            document.querySelectorAll('#consultationFields textarea').forEach(el => {
+                el.removeAttribute('required');
+            });
+            document.querySelectorAll('#partnershipFields select, #partnershipFields textarea').forEach(el => {
+                el.removeAttribute('required');
+            });
+            document.querySelectorAll('#generalFields input, #generalFields textarea').forEach(el => {
+                el.removeAttribute('required');
+            });
+
+            // Add required to visible fields
+            if (type === 'project') {
+                document.getElementById('projectType').setAttribute('required', '');
+                document.getElementById('projectDescription').setAttribute('required', '');
+            } else if (type === 'consultation') {
+                document.getElementById('consultationTopic').setAttribute('required', '');
+            } else if (type === 'partnership') {
+                document.getElementById('organizationType').setAttribute('required', '');
+                document.getElementById('partnershipType').setAttribute('required', '');
+                document.getElementById('partnershipDetails').setAttribute('required', '');
+            } else if (type === 'general') {
+                document.getElementById('subject').setAttribute('required', '');
+                document.getElementById('generalMessage').setAttribute('required', '');
+            }
+        }
+
+        function goBack() {
+            // Hide form
+            document.getElementById('dynamicForm').classList.add('hidden');
+            
+            // Show selection screen
+            document.getElementById('inquiryTypeSelection').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('contactForm').reset();
+            
+            // Hide messages
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('errorMessage').classList.add('hidden');
+        }
+
+        // Handle form submission
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            // Hide any previous messages
+            document.getElementById('successMessage').classList.add('hidden');
+            document.getElementById('errorMessage').classList.add('hidden');
+
+            // Send email using EmailJS
+            // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual IDs from EmailJS
+            emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    document.getElementById('contactForm').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    
+                    // Reset form
+                    document.getElementById('contactForm').reset();
+                    
+                    // Redirect back to selection after 3 seconds
+                    setTimeout(() => {
+                        goBack();
+                        document.getElementById('contactForm').classList.remove('hidden');
+                    }, 3000);
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    document.getElementById('errorMessage').classList.remove('hidden');
+                    
+                    // Re-enable button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                });
+        });
+
+        // Set minimum date for consultation to today
+        const dateInput = document.getElementById('preferredDate');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.setAttribute('min', today);
+        }
+    </script>
+</body>
+</html>
